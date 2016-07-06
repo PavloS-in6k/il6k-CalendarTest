@@ -4,8 +4,7 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class MyCalendar
-{
+public class MyCalendar {
     private LocalDate date;
 
     public static final String yellow = "\033[33m";
@@ -16,8 +15,8 @@ public class MyCalendar
         return date;
     }
 
-    public MyCalendar()
-    {}
+    public MyCalendar() {
+    }
 
 
     public String getStringCalendar() {
@@ -43,7 +42,7 @@ public class MyCalendar
         return calendar;
     }
 
-    public  String getColor(LocalDate date, int dayOfMonthNumber) {
+    public String getColor(LocalDate date, int dayOfMonthNumber) {
         if (date.getDayOfMonth() == dayOfMonthNumber) {
             return yellow; // Yellow color
         } else {
