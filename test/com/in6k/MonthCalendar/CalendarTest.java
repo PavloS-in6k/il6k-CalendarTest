@@ -23,7 +23,7 @@ public class CalendarTest {
 
 
     private void splitCalendarIntoLines() {
-        this.splitedCalendar = this.calendar.getStringCalendar(false).split("\\.?\n");
+        this.splitedCalendar = this.calendar.getStringCalendar(TypeOfHighlighting.COLOR).split("\\.?\n");
     }
 
 
@@ -31,8 +31,7 @@ public class CalendarTest {
         return this.splitedCalendar[index].split("\\.?\t");
     }
 
-    private void setAdditionalDataAfterChangingDate()
-    {
+    private void setAdditionalDataAfterChangingDate() {
         this.calendar.setLocalDate(today);
         splitCalendarIntoLines();
     }
@@ -45,7 +44,7 @@ public class CalendarTest {
 
     @Test
     public void testTodayShownWithRigthColor() {
-        assertThat(this.calendar.getStringCalendar(false),
+        assertThat(this.calendar.getStringCalendar(TypeOfHighlighting.COLOR),
                 containsString(DayColor.TODAY + today.getDayOfMonth()));
     }
 
@@ -88,13 +87,13 @@ public class CalendarTest {
         this.calendar.setLocalDate(LocalDate.parse("2016-07-07"));
         String etalonCalendar =
                 "Mon Tue Wed Thu Fri Sat Sun \n" +
-                "    1 [2] [3] \n" +
-                "4 5 6 {7} 8 [9] [10] \n" +
-                "11 12 13 14 15 [16] [17] \n" +
-                "18 19 20 21 22 [23] [24] \n" +
-                "25 26 27 28 29 [30] [31] \n";
+                        "    1 [2] [3] \n" +
+                        "4 5 6 {7} 8 [9] [10] \n" +
+                        "11 12 13 14 15 [16] [17] \n" +
+                        "18 19 20 21 22 [23] [24] \n" +
+                        "25 26 27 28 29 [30] [31] \n";
         etalonCalendar = etalonCalendar.replace(" ", "\t");
-        assertThat(this.calendar.getStringCalendar(true), is(equalTo(etalonCalendar)));
+        assertThat(this.calendar.getStringCalendar(TypeOfHighlighting.BRACKETS), is(equalTo(etalonCalendar)));
     }
 
 

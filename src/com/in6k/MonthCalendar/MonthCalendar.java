@@ -11,33 +11,49 @@ public class MonthCalendar {
     public MonthCalendar() {
     }
 
-
-    public String getStringCalendar(Boolean getVersionWithBrackets) {
+    public String getStringCalendar(TypeOfHighlighting typeOfHighlighting) {
         String calendar = "";
-        for (int i = 0; i <= 6; i++) {
-            calendar += (DayOfWeek.values())[i].getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + "\t";
-        }
-
+        calendar += getDaysOfWeekWithTabs();
         calendar += "\n";
-        for (int i = 1; i < DayOfWeek.from(this.date.withDayOfMonth(1)).getValue(); i++) {
-            calendar += "\t";
-        }
+        calendar += getTabsForEmptyDateSlots();
 
         for (int dayOfMonthNumber = 1; dayOfMonthNumber <= this.date.lengthOfMonth(); dayOfMonthNumber++) {
-
-            if (!getVersionWithBrackets) {
-                calendar += getColoredDate(this.date, dayOfMonthNumber) + "\t";
-            }
-            else
-            {
-                calendar += getFormedWithBracketsDay(this.date, dayOfMonthNumber) + "\t";
-            }
+            calendar += getHighlightedDay(dayOfMonthNumber, typeOfHighlighting);
 
             if (DayOfWeek.from(this.date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY) {
                 calendar += "\n";
             }
         }
+
         return calendar;
+    }
+
+    private String getHighlightedDay(int dayOfMonthNumber, TypeOfHighlighting typeOfHighlighting) {
+        switch (typeOfHighlighting) {
+            case COLOR: {
+                return getColoredDate(this.date, dayOfMonthNumber) + "\t";
+            }
+            case BRACKETS: {
+                return getFormedWithBracketsDay(this.date, dayOfMonthNumber) + "\t";
+            }
+        }
+        return "";
+    }
+
+    private String getTabsForEmptyDateSlots() {
+        String forTabs = "";
+        for (int i = 1; i < DayOfWeek.from(this.date.withDayOfMonth(1)).getValue(); i++) {
+            forTabs += "\t";
+        }
+        return forTabs;
+    }
+
+    private String getDaysOfWeekWithTabs() {
+        String forDays = "";
+        for (int i = 0; i <= 6; i++) {
+            forDays += (DayOfWeek.values())[i].getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + "\t";
+        }
+        return forDays;
     }
 
     public String getColoredDate(LocalDate date, int dayOfMonthNumber) {
@@ -53,8 +69,7 @@ public class MonthCalendar {
         }
     }
 
-    public String getFormedWithBracketsDay(LocalDate date, int dayOfMonthNumber)
-    {
+    public String getFormedWithBracketsDay(LocalDate date, int dayOfMonthNumber) {
         if (date.getDayOfMonth() == dayOfMonthNumber) {
             return "{" + dayOfMonthNumber + "}";
         } else {
