@@ -1,7 +1,5 @@
 package com.in6k.MonthCalendar;
 
-import com.in6k.MonthCalendar.DayColor;
-import com.in6k.MonthCalendar.MonthCalendar;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,40 +20,42 @@ public class CalendarTest {
     LocalDate today;
 
 
-    private void splitCalendarIntoLines() {
-        this.splitedCalendar = this.calendar.getStringCalendar(TypeOfHighlighting.COLOR).split("\\.?\n");
+    private void splitCalendarIntoLines() throws Exception {
+        splitedCalendar = calendar.getStringCalendar(TypeOfHighlighting.COLOR).split("\\.?\n");
     }
 
 
     private String[] splitLineIntoDates(int index) {
-        return this.splitedCalendar[index].split("\\.?\t");
+        return splitedCalendar[index].split("\\.?\t");
     }
 
-    private void setAdditionalDataAfterChangingDate() {
-        this.calendar.setLocalDate(today);
+    private void setAdditionalDataAfterChangingDate() throws Exception {
+        calendar.setLocalDate(today);
         splitCalendarIntoLines();
     }
 
     @Before
-    public void setup() {
+    public void setup() throws Exception {
         today = LocalDate.parse("2016-07-07");
         setAdditionalDataAfterChangingDate();
     }
 
     @Test
-    public void testTodayShownWithRigthColor() {
-        assertThat(this.calendar.getStringCalendar(TypeOfHighlighting.COLOR),
+    public void todayShownWithRigthColor() throws Exception {
+        assertThat(calendar.getStringCalendar(TypeOfHighlighting.COLOR),
                 containsString(DayColor.TODAY + today.getDayOfMonth()));
     }
 
     @Test
-    public void dateWithMondayNotFirstDayOfMonth() {
-        assertThat(this.splitedCalendar[1], not(startsWith(DayColor.WORK)));
+    public void dateWithMondayAsFirstDayOfMonthShownCorrectly() throws Exception {
+        today = LocalDate.parse("2016-02-01");
+        setAdditionalDataAfterChangingDate();
+        assertThat(splitedCalendar[1], startsWith(DayColor.TODAY + 1));
     }
 
     @Test
     public void isDaysOfWeekWrittenRigth() {
-        assertThat(this.splitedCalendar[0], is(equalTo("Mon\tTue\tWed\tThu\tFri\tSat\tSun\t")));
+        assertThat(splitedCalendar[0], is(equalTo("Mon\tTue\tWed\tThu\tFri\tSat\tSun\t")));
     }
 
     @Test
@@ -66,8 +66,8 @@ public class CalendarTest {
     }
 
     @Test
-    public void isWeekendTodayHighlightedWithRigthColor() {
-        this.calendar.setLocalDate(LocalDate.parse("2016-07-09"));
+    public void isWeekendTodayHighlightedWithRigthColor() throws Exception {
+        calendar.setLocalDate(LocalDate.parse("2016-07-09"));
         splitCalendarIntoLines();
 
         String[] splitedDates = splitLineIntoDates(2);
@@ -77,14 +77,14 @@ public class CalendarTest {
 
     @Test
     public void noDaysAfterLastDayOfThisMonth() {
-        assertThat(this.splitedCalendar[splitedCalendar.length - 1],
+        assertThat(splitedCalendar[splitedCalendar.length - 1],
                 endsWith("" + today.lengthOfMonth() + "\t"));
     }
 
 
     @Test
-    public void etalonForSpecialDate() {
-        this.calendar.setLocalDate(LocalDate.parse("2016-07-07"));
+    public void etalonForSpecialDate() throws Exception {
+        calendar.setLocalDate(LocalDate.parse("2016-07-07"));
         String etalonCalendar =
                 "Mon Tue Wed Thu Fri Sat Sun \n" +
                         "    1 [2] [3] \n" +
@@ -93,15 +93,15 @@ public class CalendarTest {
                         "18 19 20 21 22 [23] [24] \n" +
                         "25 26 27 28 29 [30] [31] \n";
         etalonCalendar = etalonCalendar.replace(" ", "\t");
-        assertThat(this.calendar.getStringCalendar(TypeOfHighlighting.BRACKETS), is(equalTo(etalonCalendar)));
+        assertThat(calendar.getStringCalendar(TypeOfHighlighting.BRACKETS), is(equalTo(etalonCalendar)));
     }
 
 
     @Test
-    public void isWeekBeginsFromMonday() {
-        this.today = LocalDate.parse("2016-07-04");
-        this.setAdditionalDataAfterChangingDate();
-        this.splitLineIntoDates(2);
+    public void isWeekBeginsFromMonday() throws Exception {
+        today = LocalDate.parse("2016-07-04");
+        setAdditionalDataAfterChangingDate();
+        splitLineIntoDates(2);
 
         assertThat(today.getDayOfWeek(), equalTo(DayOfWeek.MONDAY));
     }

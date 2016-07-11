@@ -11,16 +11,12 @@ public class MonthCalendar {
     public MonthCalendar() {
     }
 
-    public String getStringCalendar(TypeOfHighlighting typeOfHighlighting) {
+    public String getStringCalendar(TypeOfHighlighting typeOfHighlighting) throws Exception {
         String calendar = "";
-        calendar += getDaysOfWeekWithTabs();
-        calendar += "\n";
-        calendar += getTabsForEmptyDateSlots();
-
-        for (int dayOfMonthNumber = 1; dayOfMonthNumber <= this.date.lengthOfMonth(); dayOfMonthNumber++) {
+        calendar += getDaysOfWeekWithTabs() + "\n" + getTabsForEmptyDateSlots();
+        for (int dayOfMonthNumber = 1; dayOfMonthNumber <= date.lengthOfMonth(); dayOfMonthNumber++) {
             calendar += getHighlightedDay(dayOfMonthNumber, typeOfHighlighting);
-
-            if (DayOfWeek.from(this.date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY) {
+            if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY) {
                 calendar += "\n";
             }
         }
@@ -28,21 +24,22 @@ public class MonthCalendar {
         return calendar;
     }
 
-    private String getHighlightedDay(int dayOfMonthNumber, TypeOfHighlighting typeOfHighlighting) {
+    private String getHighlightedDay(int dayOfMonthNumber, TypeOfHighlighting typeOfHighlighting) throws Exception {
         switch (typeOfHighlighting) {
             case COLOR: {
-                return getColoredDate(this.date, dayOfMonthNumber) + "\t";
+                return getColoredDate(dayOfMonthNumber) + "\t";
             }
             case BRACKETS: {
-                return getFormedWithBracketsDay(this.date, dayOfMonthNumber) + "\t";
+                return getFormedWithBracketsDay(dayOfMonthNumber) + "\t";
             }
+            default:
+                throw new Exception("Type of highligth is not verified!");
         }
-        return "";
     }
 
     private String getTabsForEmptyDateSlots() {
         String forTabs = "";
-        for (int i = 1; i < DayOfWeek.from(this.date.withDayOfMonth(1)).getValue(); i++) {
+        for (int i = 1; i < DayOfWeek.from(date.withDayOfMonth(1)).getValue(); i++) {
             forTabs += "\t";
         }
         return forTabs;
@@ -56,7 +53,7 @@ public class MonthCalendar {
         return forDays;
     }
 
-    public String getColoredDate(LocalDate date, int dayOfMonthNumber) {
+    public String getColoredDate(int dayOfMonthNumber) {
         if (date.getDayOfMonth() == dayOfMonthNumber) {
             return DayColor.TODAY + dayOfMonthNumber;
         } else {
@@ -69,7 +66,7 @@ public class MonthCalendar {
         }
     }
 
-    public String getFormedWithBracketsDay(LocalDate date, int dayOfMonthNumber) {
+    public String getFormedWithBracketsDay(int dayOfMonthNumber) {
         if (date.getDayOfMonth() == dayOfMonthNumber) {
             return "{" + dayOfMonthNumber + "}";
         } else {

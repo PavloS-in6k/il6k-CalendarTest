@@ -1,18 +1,14 @@
 import com.in6k.MonthCalendar.MonthCalendar;
 import com.in6k.MonthCalendar.TypeOfHighlighting;
 
-import java.io.FileNotFoundException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws FileNotFoundException, UnsupportedEncodingException {
+    public static void main(String[] args) throws Exception {
         MonthCalendar calendar = getDateFromKeyboard();
-
         System.out.print(calendar.getStringCalendar(TypeOfHighlighting.COLOR));
-
         generateFileOutput(calendar);
     }
 
@@ -25,7 +21,7 @@ public class Main {
         return calendar;
     }
 
-    private static void generateFileOutput(MonthCalendar calendar) throws FileNotFoundException, UnsupportedEncodingException {
+    private static void generateFileOutput(MonthCalendar calendar) throws Exception {
         PrintWriter writer = new PrintWriter("the-file-name.txt", "UTF-8");
         writer.println(calendar.getStringCalendar(TypeOfHighlighting.BRACKETS));
         writer.close();
