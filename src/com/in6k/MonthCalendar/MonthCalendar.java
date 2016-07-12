@@ -30,60 +30,6 @@ public class MonthCalendar {
         return calendar;
     }
 
-    private String getHighlightedDay(int dayOfMonthNumber, TypeOfHighlighting typeOfHighlighting) throws Exception {
-        switch (typeOfHighlighting) {
-            case COLOR: {
-                return getColoredDate(dayOfMonthNumber) + "\t";
-            }
-            case BRACKETS: {
-                return getFormedWithBracketsDay(dayOfMonthNumber) + "\t";
-            }
-            default:
-                throw new Exception("Type of highligth is not verified!");
-        }
-    }
-
-    private String getTabsForEmptyDateSlots() {
-        String forTabs = "";
-        for (int i = 1; i < DayOfWeek.from(date.withDayOfMonth(1)).getValue(); i++) {
-            forTabs += "\t";
-        }
-        return forTabs;
-    }
-
-    private String getDaysOfWeekWithTabs() {
-        String forDays = "";
-        for (int i = 0; i <= 6; i++) {
-            forDays += (DayOfWeek.values())[i].getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + "\t";
-        }
-        return forDays;
-    }
-
-    public String getColoredDate(int dayOfMonthNumber) {
-        if (date.getDayOfMonth() == dayOfMonthNumber) {
-            return DayColor.TODAY + dayOfMonthNumber;
-        } else {
-            if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SATURDAY
-                    || DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY) {
-                return DayColor.WEEKEND + dayOfMonthNumber;
-            } else {
-                return DayColor.WORK + dayOfMonthNumber;
-            }
-        }
-    }
-
-    public String getFormedWithBracketsDay(int dayOfMonthNumber) {
-        if (date.getDayOfMonth() == dayOfMonthNumber) {
-            return "{" + dayOfMonthNumber + "}";
-        } else {
-            if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SATURDAY
-                    || DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY) {
-                return "[" + dayOfMonthNumber + ']';
-            } else {
-                return "" + dayOfMonthNumber;
-            }
-        }
-    }
 
 
     public void setLocalDate(LocalDate date) {
