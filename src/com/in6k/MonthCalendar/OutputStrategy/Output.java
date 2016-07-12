@@ -7,6 +7,8 @@ import java.time.LocalDate;
  */
 public interface Output {
     String getDaysOfWeekNames();
+
     String getEmptyPartOfCalendar(LocalDate date);
+
     String getHighlightedDay(LocalDate date, int dayOfMonthNumber);
 }
