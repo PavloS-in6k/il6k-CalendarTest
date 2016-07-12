@@ -1,5 +1,5 @@
 import com.in6k.MonthCalendar.MonthCalendar;
-import com.in6k.MonthCalendar.TypeOfHighlighting;
+import com.in6k.MonthCalendar.OutputStrategy.TypeOfHighlighting;
 
 import java.io.PrintWriter;
 import java.time.LocalDate;

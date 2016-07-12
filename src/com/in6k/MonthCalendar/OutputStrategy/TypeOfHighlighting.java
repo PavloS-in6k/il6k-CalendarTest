@@ -1,4 +1,4 @@
-package com.in6k.MonthCalendar;
+package com.in6k.MonthCalendar.OutputStrategy;
 
 /**
  * Created by employee on 7/11/16.
