@@ -5,18 +5,19 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-/**
- * Created by employee on 7/12/16.
- */
 public class ConsoleOutput implements Output {
-
     String delimiter = "\t";
 
     @Override
     public String getDaysOfWeekNames() {
         String result = "";
-        for (int i = 0; i <= 6; i++) {
-            result += (DayOfWeek.values())[i].getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + delimiter;
+        for (DayOfWeek day : DayOfWeek.values()) {
+            if (day.equals(DayOfWeek.SATURDAY) || day.equals(DayOfWeek.SUNDAY)) {
+                result += DayColor.WEEKEND + day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+            } else {
+                result += DayColor.WORK + day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
+            }
+            result += delimiter;
         }
         return result;
     }
@@ -43,5 +44,25 @@ public class ConsoleOutput implements Output {
                 return DayColor.WORK + dayOfMonthNumber + delimiter;
             }
         }
+    }
+
+    @Override
+    public String getOpenLineTag() {
+        return "";
+    }
+
+    @Override
+    public String getCloseLineTag() {
+        return "\n";
+    }
+
+    @Override
+    public String getOpenInfo() {
+        return "";
+    }
+
+    @Override
+    public String getCloseInfo() {
+        return "";
     }
 }
