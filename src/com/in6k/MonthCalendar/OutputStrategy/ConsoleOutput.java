@@ -9,17 +9,14 @@ public class ConsoleOutput implements Output {
     String delimiter = "\t";
 
     @Override
-    public String getDaysOfWeekNames() {
-        String result = "";
-        for (DayOfWeek day : DayOfWeek.values()) {
-            if (day.equals(DayOfWeek.SATURDAY) || day.equals(DayOfWeek.SUNDAY)) {
-                result += DayColor.WEEKEND + day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-            } else {
-                result += DayColor.WORK + day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-            }
-            result += delimiter;
-        }
-        return result;
+    public String getDayOfWeekWeekendName(DayOfWeek day) {
+        return "" + DayColor.WEEKEND + day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + delimiter;
+    }
+
+    @Override
+    public String getDayOfWeekWorkName(DayOfWeek day) {
+        return "" + DayColor.WORK + day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + delimiter;
+
     }
 
     @Override
@@ -31,19 +28,19 @@ public class ConsoleOutput implements Output {
         return forTabs;
     }
 
+    @Override
+    public String getHighlightedDayToday(int dayOfMonthNumber) {
+        return DayColor.TODAY + dayOfMonthNumber + delimiter;
+    }
 
     @Override
-    public String getHighlightedDay(LocalDate date, int dayOfMonthNumber) {
-        if (date.getDayOfMonth() == dayOfMonthNumber) {
-            return DayColor.TODAY + dayOfMonthNumber + delimiter;
-        } else {
-            if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SATURDAY
-                    || DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY) {
-                return DayColor.WEEKEND + dayOfMonthNumber + delimiter;
-            } else {
-                return DayColor.WORK + dayOfMonthNumber + delimiter;
-            }
-        }
+    public String getHighlightedDayWork(int dayOfMonthNumber) {
+        return DayColor.WORK + dayOfMonthNumber + delimiter;
+    }
+
+    @Override
+    public String getHighlightedDayWeekend(int dayOfMonthNumber) {
+        return DayColor.WEEKEND + dayOfMonthNumber + delimiter;
     }
 
     @Override

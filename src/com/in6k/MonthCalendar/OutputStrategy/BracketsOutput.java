@@ -9,17 +9,13 @@ public class BracketsOutput implements Output {
     String delimiter = "\t";
 
     @Override
-    public String getDaysOfWeekNames() {
-        String result = "";
-        for (DayOfWeek day : DayOfWeek.values()) {
-            if (day.equals(DayOfWeek.SATURDAY) || day.equals(DayOfWeek.SUNDAY)) {
-                result += "[" + day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + "]";
-            } else {
-                result += day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH);
-            }
-            result += delimiter;
-        }
-        return result;
+    public String getDayOfWeekWeekendName(DayOfWeek day) {
+        return "[" + day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + "]" + delimiter;
+    }
+
+    @Override
+    public String getDayOfWeekWorkName(DayOfWeek day) {
+        return day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + delimiter;
     }
 
     @Override
@@ -32,17 +28,19 @@ public class BracketsOutput implements Output {
     }
 
     @Override
-    public String getHighlightedDay(LocalDate date, int dayOfMonthNumber) {
-        if (date.getDayOfMonth() == dayOfMonthNumber) {
-            return "{" + dayOfMonthNumber + "}" + delimiter;
-        } else {
-            if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SATURDAY
-                    || DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY) {
-                return "[" + dayOfMonthNumber + ']' + delimiter;
-            } else {
-                return "" + dayOfMonthNumber + delimiter;
-            }
-        }
+    public String getHighlightedDayToday(int dayOfMonthNumber) {
+        return "{" + dayOfMonthNumber + "}" + delimiter;
+
+    }
+
+    @Override
+    public String getHighlightedDayWork(int dayOfMonthNumber) {
+        return "" + dayOfMonthNumber + delimiter;
+    }
+
+    @Override
+    public String getHighlightedDayWeekend(int dayOfMonthNumber) {
+        return "[" + dayOfMonthNumber + ']' + delimiter;
     }
 
     @Override

@@ -23,7 +23,7 @@ public class HTMLOutputTest {
 
     @Test
     public void isTodayHighlighted() throws Exception {
-        assertThat(outputGenerator.getHighlightedDay(today, 7),
+        assertThat(outputGenerator.getHighlightedDayToday(7),
                 equalTo("<td class=\"" + CSSHighlighthClass.TODAY + "\">7</td>"));
     }
 
@@ -35,7 +35,7 @@ public class HTMLOutputTest {
 
     @Test
     public void isWeekendHighlighted() throws Exception {
-        assertThat(outputGenerator.getHighlightedDay(today, 2),
+        assertThat(outputGenerator.getHighlightedDayToday(2),
                 equalTo("<td class=\"" + CSSHighlighthClass.WEEKEND + "\">2</td>"));
     }
 }
