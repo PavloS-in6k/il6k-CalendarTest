@@ -10,14 +10,14 @@ import java.util.Locale;
 public class HTMLOutput implements Output {
     @Override
     public String getDayOfWeekWeekendName(DayOfWeek day) {
-        return wrapContentInTag(wrapContentInTag((day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)),
-                HTMLTags.CELL, CSSHighlighthClass.WEEKEND), HTMLTags.TABLE_ROW);
+        return wrapContentInTag((day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)),
+                HTMLTags.CELL, CSSHighlighthClass.WEEKEND);
     }
 
     @Override
     public String getDayOfWeekWorkName(DayOfWeek day) {
-        return wrapContentInTag(wrapContentInTag((day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)),
-                HTMLTags.CELL, CSSHighlighthClass.WORK), HTMLTags.TABLE_ROW);
+        return wrapContentInTag((day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)),
+                HTMLTags.CELL, CSSHighlighthClass.WORK);
     }
 
     @Override

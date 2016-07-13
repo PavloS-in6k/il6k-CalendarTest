@@ -6,6 +6,7 @@ import com.in6k.MonthCalendar.OutputStrategy.HTML.HTMLOutput;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 
 
@@ -22,20 +23,42 @@ public class HTMLOutputTest {
     }
 
     @Test
+    public void isDayNamesPartCorrect() throws Exception {
+        String dayNames = "";
+        dayNames += outputGenerator.getDayOfWeekWorkName(DayOfWeek.MONDAY);
+        for (DayOfWeek day = DayOfWeek.TUESDAY; !day.equals(DayOfWeek.MONDAY); day = day.plus(1)) {
+            if (day.equals(DayOfWeek.SATURDAY) || day.equals(DayOfWeek.SUNDAY))
+                dayNames += outputGenerator.getDayOfWeekWeekendName(day);
+            else
+                dayNames += outputGenerator.getDayOfWeekWorkName(day);
+        }
+        assertThat(dayNames, equalTo(
+                "<td class=\"work\">Mon</td><td class=\"work\">Tue</td><td class=\"work\">Wed</td>" +
+                        "<td class=\"work\">Thu</td><td class=\"work\">Fri</td><td class=\"weekend\">Sat</td>" +
+                        "<td class=\"weekend\">Sun</td>"
+        ));
+    }
+
+    @Test
     public void isTodayHighlighted() throws Exception {
         assertThat(outputGenerator.getHighlightedDayToday(7),
                 equalTo("<td class=\"" + CSSHighlighthClass.TODAY + "\">7</td>"));
     }
 
     @Test
-    public void isEmptyCellsCreatedRigth() throws Exception {
+    public void isWorkDayHighlighted() throws Exception {
+        assertThat(outputGenerator.getHighlightedDayWork(1), equalTo("<td class=\"" + CSSHighlighthClass.WORK + "\">1</td>"));
+    }
+
+    @Test
+    public void isEmptyCellsCreatedRight() throws Exception {
         assertThat(outputGenerator.getEmptyPartOfCalendar(today),
                 equalTo("<td class=\"work\"></td><td class=\"work\"></td><td class=\"work\"></td><td class=\"work\"></td>"));
     }
 
     @Test
     public void isWeekendHighlighted() throws Exception {
-        assertThat(outputGenerator.getHighlightedDayToday(2),
+        assertThat(outputGenerator.getHighlightedDayWeekend(2),
                 equalTo("<td class=\"" + CSSHighlighthClass.WEEKEND + "\">2</td>"));
     }
 }

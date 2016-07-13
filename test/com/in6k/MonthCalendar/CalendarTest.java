@@ -13,20 +13,16 @@ import java.time.LocalDate;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 
-
 public class CalendarTest {
-
     private static final int SAT = 5;
     private static final int SUN = 6;
     public MonthCalendar calendar = new MonthCalendar();
     String[] splitedCalendar;
     LocalDate today;
 
-
     private void splitCalendarIntoLines() throws Exception {
         splitedCalendar = calendar.getStringCalendar(TypeOfRequestedOutput.CONSOLE_COLOR).split("\\.?\n");
     }
-
 
     private String[] splitLineIntoDates(int index) {
         return splitedCalendar[index].split("\\.?\t");
@@ -57,7 +53,7 @@ public class CalendarTest {
     }
 
     @Test
-    @Ignore ("Find way to identify color of day and remove ignore")
+    @Ignore("Find way to identify color of day and remove ignore")
     public void isDaysOfWeekWrittenRigth() {
         splitedCalendar[0].replace(DayColor.WORK, "");
         splitedCalendar[0].replace(DayColor.WEEKEND, "");
@@ -89,7 +85,6 @@ public class CalendarTest {
 
 
     @Test
-    //@Ignore("Turn on back when implement brackets strategy part")
     public void etalonForSpecialDate() throws Exception {
         calendar.setLocalDate(LocalDate.parse("2016-07-07"));
         String etalonCalendar =

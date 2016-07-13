@@ -58,7 +58,7 @@ public class MonthCalendar {
                 + outputGenerator.getEmptyPartOfCalendar(date);
     }
 
-    private String getDaysOfWeekNames(DayOfWeek firstDayOfWeek) {
+    protected String getDaysOfWeekNames(DayOfWeek firstDayOfWeek) {
         String result = "";
         result += getDayOfWeekName(firstDayOfWeek);
         for (DayOfWeek day = firstDayOfWeek.plus(1); !day.equals(firstDayOfWeek); day = day.plus(1)) {
