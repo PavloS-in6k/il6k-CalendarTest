@@ -8,6 +8,7 @@ import org.junit.Test;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -95,5 +96,55 @@ public class CalendarTest {
         setAdditionalDataAfterChangingDate();
         splitLineIntoDates(2);
         assertThat(today.getDayOfWeek(), equalTo(DayOfWeek.MONDAY));
+    }
+
+    @Test
+    public void isWeekStartWithRigthDay() throws Exception {
+        setDayAsFirstDayOfWeek(DayOfWeek.FRIDAY);
+        assertThat(splitedCalendar[1], startsWith(DayColor.WORK + 1));
+    }
+
+    private void setDayAsFirstDayOfWeek(DayOfWeek day) throws Exception {
+        calendar.setWeekStart(day);
+        splitCalendarIntoLines();
+    }
+
+    @Test
+    public void isWeekendsHighlightedRight() throws Exception {
+        setMondayAsOnlyWeekend();
+        assertThat(splitedCalendar[2], startsWith(DayColor.WORK + 4));
+    }
+
+    private void setMondayAsOnlyWeekend() {
+        ArrayList<DayOfWeek> days = new ArrayList<>();
+        days.add(DayOfWeek.MONDAY);
+        calendar.setWeekendDays(days);
+    }
+
+    @Test
+    public void isBothWeekendsChoosingAndFirstDayOfWeekWorks() throws Exception {
+        setDayAsFirstDayOfWeek(DayOfWeek.WEDNESDAY);
+        setMondayAsOnlyWeekend();
+        splitCalendarIntoLines();
+        assertThat(splitedCalendar[1], containsString(DayColor.WEEKEND + 4));
+        assertThat(splitedCalendar[2], containsString(DayColor.TODAY + 7));
+    }
+
+    @Test
+    public void isFirstConstructorWorks() throws Exception {
+        calendar = new MonthCalendar(DayOfWeek.THURSDAY);
+        calendar.setLocalDate(LocalDate.parse("2016-07-07"));
+        splitCalendarIntoLines();
+        assertThat(splitedCalendar[2], startsWith(DayColor.TODAY + 7));
+    }
+
+    @Test
+    public void isConstructorForWeekendsWorks() throws Exception {
+        calendar = new MonthCalendar(LocalDate.parse("2016-07-07"));
+        assertThat(calendar.getDate(), equalTo(LocalDate.parse("2016-07-07")));
+    }
+
+    private void outputCalendarInConsole() throws Exception {
+        System.out.print(calendar.getStringCalendar());
     }
 }

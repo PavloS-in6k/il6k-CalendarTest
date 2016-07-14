@@ -5,13 +5,37 @@ import com.in6k.MonthCalendar.OutputStrategy.Output;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MonthCalendar {
     private LocalDate date;
     private Output outputGenerator = new ConsoleOutput();
+    private List<DayOfWeek> weekends = new ArrayList<>();
+    private DayOfWeek firstDayOfWeek;
 
     public MonthCalendar() {
+        setWeekendsAsUsual();
     }
+
+    private void setWeekendsAsUsual() {
+        weekends = new ArrayList<>();
+        weekends.add(DayOfWeek.SUNDAY);
+        weekends.add(DayOfWeek.SATURDAY);
+        setWeekStart(DayOfWeek.MONDAY);
+    }
+
+    public MonthCalendar(LocalDate today) {
+        setLocalDate(today);
+        setWeekendsAsUsual();
+        setWeekStart(DayOfWeek.MONDAY);
+    }
+
+    public MonthCalendar(DayOfWeek day) {
+        setWeekendsAsUsual();
+        setWeekStart(day);
+    }
+
 
     public String getStringCalendar() throws Exception {
         String calendar = "";
@@ -38,29 +62,24 @@ public class MonthCalendar {
     }
 
     private boolean isDayEndsWeek(int dayOfMonthNumber) {
-        return DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY
+        return DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == firstDayOfWeek.minus(1)
                 || date.lengthOfMonth() == dayOfMonthNumber;
     }
 
     private boolean isDayBeginsWeek(int dayOfMonthNumber) {
-        return DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.MONDAY;
+        return DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == firstDayOfWeek;
     }
 
     private String getHighlightedDay(int dayOfMonthNumber) {
         if (date.getDayOfMonth() == dayOfMonthNumber) {
             return outputGenerator.getHighlightedDayToday(dayOfMonthNumber);
         } else {
-            if (isDayWeekend(dayOfMonthNumber)) {
+            if (isWeekend(DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)))) {
                 return outputGenerator.getHighlightedDayWeekend(dayOfMonthNumber);
             } else {
                 return outputGenerator.getHighlightedDayWork(dayOfMonthNumber);
             }
         }
-    }
-
-    private boolean isDayWeekend(int dayOfMonthNumber) {
-        return DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SATURDAY
-                || DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY;
     }
 
     private String getCalendarBeginning() {
@@ -72,16 +91,15 @@ public class MonthCalendar {
 
     private String getEmptyPartOfCalendar() {
         String forTabs = "";
-        for (int i = 1; i < DayOfWeek.from(date.withDayOfMonth(1)).getValue(); i++) {
+        for (int i = 1; i < DayOfWeek.from(date.withDayOfMonth(1)).getValue() - (firstDayOfWeek.getValue() - 1); i++) {
             forTabs += outputGenerator.getEmptyPartOfCalendar(date);
         }
         return forTabs;
     }
 
-
     private String getDaysOfWeek() {
         return outputGenerator.getOpenLineTag()
-                + getDaysOfWeekNames(DayOfWeek.MONDAY)
+                + getDaysOfWeekNames(firstDayOfWeek)
                 + outputGenerator.getCloseLineTag();
     }
 
@@ -95,11 +113,17 @@ public class MonthCalendar {
     }
 
     private String getDayOfWeekName(DayOfWeek day) {
-        if (day.equals(DayOfWeek.SATURDAY) || day.equals(DayOfWeek.SUNDAY))
+        if (isWeekend(day))
             return outputGenerator.getDayOfWeekWeekendName(day);
         return outputGenerator.getDayOfWeekWorkName(day);
     }
 
+    private boolean isWeekend(DayOfWeek day) {
+        for (DayOfWeek weekend : weekends) {
+            if (day.equals(weekend)) return true;
+        }
+        return false;
+    }
 
     public void setLocalDate(LocalDate date) {
         this.date = date;
@@ -107,5 +131,17 @@ public class MonthCalendar {
 
     public void setOutputGenerator(Output outputGenerator) {
         this.outputGenerator = outputGenerator;
+    }
+
+    public void setWeekendDays(List<DayOfWeek> weekendDays) {
+        this.weekends = weekendDays;
+    }
+
+    public void setWeekStart(DayOfWeek day) {
+        this.firstDayOfWeek = day;
+    }
+
+    public LocalDate getDate() {
+        return date;
     }
 }
