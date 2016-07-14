@@ -39,6 +39,8 @@ public class MonthCalendar implements CalendarInterface {
 
     @Override
     public String generateCalendar(YearMonth date) throws Exception {
+        if (today == LocalDate.now().minusDays(1) || today == null)
+            setToday(() -> LocalDate.parse("2016-07-07"));
         this.date = date;
         String calendar = "";
         calendar += getCalendarBeginning();

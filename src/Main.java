@@ -12,7 +12,8 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        MonthCalendar calendar = getDateFromKeyboard();
+        LocalDate LD = null;
+        MonthCalendar calendar = getDateFromKeyboard(LD);
         if (args.length == 1) {
             setOutputType(calendar, TypeOfRequestedOutput.valueOf(args[0]));
         }
@@ -24,11 +25,12 @@ public class Main {
         }
     }
 
-    private static MonthCalendar getDateFromKeyboard() {
+    private static MonthCalendar getDateFromKeyboard(LocalDate LD) {
         MonthCalendar calendar;
         Scanner sc = new Scanner(System.in);
         System.out.print("Enter your today in format YYYY-MM-DD : \n");
-        calendar = new MonthCalendar(LocalDate.parse(sc.next()));
+        LD = LocalDate.parse(sc.next());
+        calendar = new MonthCalendar(LD);
         sc.close();
         return calendar;
     }
