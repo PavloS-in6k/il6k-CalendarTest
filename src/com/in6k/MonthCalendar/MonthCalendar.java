@@ -1,10 +1,7 @@
 package com.in6k.MonthCalendar;
 
-import com.in6k.MonthCalendar.OutputStrategy.BracketsOutput;
 import com.in6k.MonthCalendar.OutputStrategy.ConsoleOutput;
-import com.in6k.MonthCalendar.OutputStrategy.HTML.HTMLOutput;
 import com.in6k.MonthCalendar.OutputStrategy.Output;
-import com.in6k.MonthCalendar.OutputStrategy.TypeOfRequestedOutput;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
@@ -16,24 +13,31 @@ public class MonthCalendar {
     public MonthCalendar() {
     }
 
-    public String getStringCalendar(TypeOfRequestedOutput typeOfRequestedOutput) throws Exception {
-        setOutputType(typeOfRequestedOutput);
+    public String getStringCalendar() throws Exception {
         String calendar = "";
         calendar += getCalendarBeginning();
         for (int dayOfMonthNumber = 1; dayOfMonthNumber <= date.lengthOfMonth(); dayOfMonthNumber++) {
-            if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.MONDAY) {
-                calendar += outputGenerator.getOpenLineTag();
-            }
-            calendar += getHighlightedDay(dayOfMonthNumber);
-            if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY) {
-                calendar += outputGenerator.getCloseLineTag();
-            }
+            calendar += getDay(dayOfMonthNumber);
         }
-        if (calendar.endsWith(outputGenerator.getOpenLineTag())) {
-            calendar += outputGenerator.getCloseLineTag();
-        }
-        calendar += outputGenerator.getCloseInfo();
+        calendar += getCalendarEnding();
         return calendar;
+    }
+
+    private String getCalendarEnding() {
+        return outputGenerator.getCloseInfo();
+    }
+
+    private String getDay(int dayOfMonthNumber) {
+        String result = "";
+        if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.MONDAY) {
+            result += outputGenerator.getOpenLineTag();
+        }
+        result += getHighlightedDay(dayOfMonthNumber);
+        if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY
+                || date.lengthOfMonth() == dayOfMonthNumber) {
+            result += outputGenerator.getCloseLineTag();
+        }
+        return result;
     }
 
     private String getHighlightedDay(int dayOfMonthNumber) {
@@ -51,14 +55,18 @@ public class MonthCalendar {
 
     private String getCalendarBeginning() {
         return outputGenerator.getOpenInfo()
-                + outputGenerator.getOpenLineTag()
-                + getDaysOfWeekNames(DayOfWeek.MONDAY)
-                + outputGenerator.getCloseLineTag()
+                + getDaysOfWeek()
                 + outputGenerator.getOpenLineTag()
                 + outputGenerator.getEmptyPartOfCalendar(date);
     }
 
-    protected String getDaysOfWeekNames(DayOfWeek firstDayOfWeek) {
+    private String getDaysOfWeek() {
+        return outputGenerator.getOpenLineTag()
+                + getDaysOfWeekNames(DayOfWeek.MONDAY)
+                + outputGenerator.getCloseLineTag();
+    }
+
+    private String getDaysOfWeekNames(DayOfWeek firstDayOfWeek) {
         String result = "";
         result += getDayOfWeekName(firstDayOfWeek);
         for (DayOfWeek day = firstDayOfWeek.plus(1); !day.equals(firstDayOfWeek); day = day.plus(1)) {
@@ -73,24 +81,12 @@ public class MonthCalendar {
         return outputGenerator.getDayOfWeekWorkName(day);
     }
 
-    private void setOutputType(TypeOfRequestedOutput typeOfRequestedOutput) {
-        switch (typeOfRequestedOutput) {
-            case CONSOLE_BRACKETS: {
-                outputGenerator = new BracketsOutput();
-                break;
-            }
-            case CONSOLE_COLOR: {
-                outputGenerator = new ConsoleOutput();
-                break;
-            }
-            case HTML_DOCUMENT: {
-                outputGenerator = new HTMLOutput();
-                break;
-            }
-        }
-    }
 
     public void setLocalDate(LocalDate date) {
         this.date = date;
+    }
+
+    public void setOutputGenerator(Output outputGenerator) {
+        this.outputGenerator = outputGenerator;
     }
 }

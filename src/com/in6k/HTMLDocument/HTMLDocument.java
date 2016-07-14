@@ -1,9 +1,5 @@
 package com.in6k.HTMLDocument;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-
 public class HTMLDocument {
     private String document = "";
 
@@ -23,12 +19,6 @@ public class HTMLDocument {
 
     public String getDocument() {
         return document + "</body>" + "\n" + "</html>";
-    }
-
-    public void generateDocument(String fileName) throws FileNotFoundException, UnsupportedEncodingException {
-        PrintWriter writer = new PrintWriter(fileName + ".html", "UTF-8");
-        writer.println(getDocument());
-        writer.close();
     }
 }
 

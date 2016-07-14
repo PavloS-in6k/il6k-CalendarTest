@@ -6,7 +6,7 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 
 public class ConsoleOutput implements Output {
-    String delimiter = "\t";
+    private String delimiter = "\t";
 
     @Override
     public String getDayOfWeekWeekendName(DayOfWeek day) {
@@ -16,7 +16,6 @@ public class ConsoleOutput implements Output {
     @Override
     public String getDayOfWeekWorkName(DayOfWeek day) {
         return "" + DayColor.WORK + day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH) + delimiter;
-
     }
 
     @Override

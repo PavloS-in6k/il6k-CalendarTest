@@ -6,7 +6,7 @@ import java.time.format.TextStyle;
 import java.util.Locale;
 
 public class BracketsOutput implements Output {
-    String delimiter = "\t";
+    private String delimiter = "\t";
 
     @Override
     public String getDayOfWeekWeekendName(DayOfWeek day) {
@@ -30,7 +30,6 @@ public class BracketsOutput implements Output {
     @Override
     public String getHighlightedDayToday(int dayOfMonthNumber) {
         return "{" + dayOfMonthNumber + "}" + delimiter;
-
     }
 
     @Override

@@ -1,21 +1,20 @@
 package com.in6k.MonthCalendar;
 
-import com.in6k.MonthCalendar.OutputStrategy.*;
 import com.in6k.MonthCalendar.OutputStrategy.HTML.CSSHighlighthClass;
 import com.in6k.MonthCalendar.OutputStrategy.HTML.HTMLOutput;
+import com.in6k.MonthCalendar.OutputStrategy.Output;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 
-
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
 public class HTMLOutputTest {
-    LocalDate today;
-    Output outputGenerator = new HTMLOutput();
+    private LocalDate today;
+    private Output outputGenerator = new HTMLOutput();
 
     @Before
     public void setup() throws Exception {
@@ -24,6 +23,15 @@ public class HTMLOutputTest {
 
     @Test
     public void isDayNamesPartCorrect() throws Exception {
+        String dayNames = getDayNames();
+        assertThat(dayNames, equalTo(
+                "<td class=\"work\">Mon</td><td class=\"work\">Tue</td><td class=\"work\">Wed</td>" +
+                        "<td class=\"work\">Thu</td><td class=\"work\">Fri</td><td class=\"weekend\">Sat</td>" +
+                        "<td class=\"weekend\">Sun</td>"
+        ));
+    }
+
+    private String getDayNames() {
         String dayNames = "";
         dayNames += outputGenerator.getDayOfWeekWorkName(DayOfWeek.MONDAY);
         for (DayOfWeek day = DayOfWeek.TUESDAY; !day.equals(DayOfWeek.MONDAY); day = day.plus(1)) {
@@ -32,11 +40,7 @@ public class HTMLOutputTest {
             else
                 dayNames += outputGenerator.getDayOfWeekWorkName(day);
         }
-        assertThat(dayNames, equalTo(
-                "<td class=\"work\">Mon</td><td class=\"work\">Tue</td><td class=\"work\">Wed</td>" +
-                        "<td class=\"work\">Thu</td><td class=\"work\">Fri</td><td class=\"weekend\">Sat</td>" +
-                        "<td class=\"weekend\">Sun</td>"
-        ));
+        return dayNames;
     }
 
     @Test
@@ -51,14 +55,16 @@ public class HTMLOutputTest {
     }
 
     @Test
+    public void isWeekendHighlighted() throws Exception {
+        assertThat(outputGenerator.getHighlightedDayWeekend(2),
+                equalTo("<td class=\"" + CSSHighlighthClass.WEEKEND + "\">2</td>"));
+    }
+
+    @Test
     public void isEmptyCellsCreatedRight() throws Exception {
         assertThat(outputGenerator.getEmptyPartOfCalendar(today),
                 equalTo("<td class=\"work\"></td><td class=\"work\"></td><td class=\"work\"></td><td class=\"work\"></td>"));
     }
 
-    @Test
-    public void isWeekendHighlighted() throws Exception {
-        assertThat(outputGenerator.getHighlightedDayWeekend(2),
-                equalTo("<td class=\"" + CSSHighlighthClass.WEEKEND + "\">2</td>"));
-    }
+
 }
