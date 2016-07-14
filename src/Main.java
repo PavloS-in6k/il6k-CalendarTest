@@ -15,7 +15,6 @@ public class Main {
         if (args.length == 1) {
             setOutputType(calendar, TypeOfRequestedOutput.valueOf(args[0]));
         }
-
         System.out.print(calendar.getStringCalendar());
         generateTextBracketsFileOutput(calendar);
         generateHTMLFileOutput(calendar);
