@@ -7,6 +7,7 @@ import com.in6k.MonthCalendar.OutputStrategy.TypeOfRequestedOutput;
 
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.Scanner;
 
 public class Main {
@@ -15,9 +16,12 @@ public class Main {
         if (args.length == 1) {
             setOutputType(calendar, TypeOfRequestedOutput.valueOf(args[0]));
         }
-        System.out.print(calendar.getStringCalendar());
         generateTextBracketsFileOutput(calendar);
         generateHTMLFileOutput(calendar);
+        setOutputType(calendar, TypeOfRequestedOutput.CONSOLE_COLOR);
+        while (true) {
+            System.out.print(calendar.generateCalendar(YearMonth.from(calendar.getToday())));
+        }
     }
 
     private static MonthCalendar getDateFromKeyboard() {
@@ -32,14 +36,14 @@ public class Main {
     private static void generateTextBracketsFileOutput(MonthCalendar calendar) throws Exception {
         setOutputType(calendar, TypeOfRequestedOutput.CONSOLE_BRACKETS);
         PrintWriter writer = new PrintWriter("the-file-name.txt", "UTF-8");
-        writer.println(calendar.getStringCalendar());
+        writer.println(calendar.generateCalendar(YearMonth.from(calendar.getToday())));
         writer.close();
     }
 
     private static void generateHTMLFileOutput(MonthCalendar calendar) throws Exception {
         HtmlDocument document = new HtmlDocument();
         setOutputType(calendar, TypeOfRequestedOutput.HTML_DOCUMENT);
-        document.addToDocument(calendar.getStringCalendar());
+        document.addToDocument(calendar.generateCalendar(YearMonth.from(calendar.getToday())));
         PrintWriter writer = new PrintWriter("calendar.html", "UTF-8");
         writer.println(document.getDocument());
         writer.close();

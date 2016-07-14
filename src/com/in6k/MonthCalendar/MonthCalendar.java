@@ -5,39 +5,41 @@ import com.in6k.MonthCalendar.OutputStrategy.Output;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.function.Supplier;
 
-public class MonthCalendar {
-    private LocalDate date;
+public class MonthCalendar implements CalendarInterface {
+    private LocalDate today;
+    private YearMonth date;
     private Output outputGenerator = new ConsoleOutput();
-    private List<DayOfWeek> weekends = new ArrayList<>();
+    private List<DayOfWeek> weekendDays = new ArrayList<>();
     private DayOfWeek firstDayOfWeek;
 
     public MonthCalendar() {
-        setWeekendsAsUsual();
+        setBasicCalendarOptions();
     }
 
-    private void setWeekendsAsUsual() {
-        weekends = new ArrayList<>();
-        weekends.add(DayOfWeek.SUNDAY);
-        weekends.add(DayOfWeek.SATURDAY);
+    private void setBasicCalendarOptions() {
+        setWeekendDays(Arrays.asList(DayOfWeek.SATURDAY, DayOfWeek.SUNDAY));
         setWeekStart(DayOfWeek.MONDAY);
     }
 
     public MonthCalendar(LocalDate today) {
-        setLocalDate(today);
-        setWeekendsAsUsual();
-        setWeekStart(DayOfWeek.MONDAY);
+        setToday(today);
+        setBasicCalendarOptions();
     }
 
     public MonthCalendar(DayOfWeek day) {
-        setWeekendsAsUsual();
+        setBasicCalendarOptions();
         setWeekStart(day);
     }
 
-
-    public String getStringCalendar() throws Exception {
+    @Override
+    public String generateCalendar(YearMonth date) throws Exception {
+        this.date = date;
         String calendar = "";
         calendar += getCalendarBeginning();
         for (int dayOfMonthNumber = 1; dayOfMonthNumber <= date.lengthOfMonth(); dayOfMonthNumber++) {
@@ -53,6 +55,13 @@ public class MonthCalendar {
         return calendar;
     }
 
+    private String getCalendarBeginning() {
+        return outputGenerator.getOpenInfo()
+                + getDaysOfWeek()
+                + outputGenerator.getOpenLineTag()
+                + getEmptyPartOfCalendar();
+    }
+
     private String getCalendarEnding() {
         return outputGenerator.getCloseInfo();
     }
@@ -62,19 +71,19 @@ public class MonthCalendar {
     }
 
     private boolean isDayEndsWeek(int dayOfMonthNumber) {
-        return DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == firstDayOfWeek.minus(1)
+        return DayOfWeek.from(date.atDay(dayOfMonthNumber)) == firstDayOfWeek.minus(1)
                 || date.lengthOfMonth() == dayOfMonthNumber;
     }
 
     private boolean isDayBeginsWeek(int dayOfMonthNumber) {
-        return DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == firstDayOfWeek;
+        return DayOfWeek.from(date.atDay(dayOfMonthNumber)) == firstDayOfWeek;
     }
 
     private String getHighlightedDay(int dayOfMonthNumber) {
-        if (date.getDayOfMonth() == dayOfMonthNumber) {
+        if (today.getDayOfMonth() == dayOfMonthNumber && date.getMonth().equals(today.getMonth())) {
             return outputGenerator.getHighlightedDayToday(dayOfMonthNumber);
         } else {
-            if (isWeekend(DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)))) {
+            if (isWeekend(DayOfWeek.from(date.atDay(dayOfMonthNumber)))) {
                 return outputGenerator.getHighlightedDayWeekend(dayOfMonthNumber);
             } else {
                 return outputGenerator.getHighlightedDayWork(dayOfMonthNumber);
@@ -82,19 +91,17 @@ public class MonthCalendar {
         }
     }
 
-    private String getCalendarBeginning() {
-        return outputGenerator.getOpenInfo()
-                + getDaysOfWeek()
-                + outputGenerator.getOpenLineTag()
-                + getEmptyPartOfCalendar();
-    }
 
     private String getEmptyPartOfCalendar() {
         String forTabs = "";
-        for (int i = 1; i < DayOfWeek.from(date.withDayOfMonth(1)).getValue() - (firstDayOfWeek.getValue() - 1); i++) {
-            forTabs += outputGenerator.getEmptyPartOfCalendar(date);
+        for (int i = 1; isThisDayGapBeforeFirstDayOfTheMonth(i); i++) {
+            forTabs += outputGenerator.getEmptyPartOfCalendar(today);
         }
         return forTabs;
+    }
+
+    private boolean isThisDayGapBeforeFirstDayOfTheMonth(int i) {
+        return i < DayOfWeek.from(today.withDayOfMonth(1)).getValue() - (firstDayOfWeek.getValue() - 1);
     }
 
     private String getDaysOfWeek() {
@@ -119,14 +126,15 @@ public class MonthCalendar {
     }
 
     private boolean isWeekend(DayOfWeek day) {
-        for (DayOfWeek weekend : weekends) {
-            if (day.equals(weekend)) return true;
-        }
-        return false;
+        return weekendDays.contains(day);
     }
 
-    public void setLocalDate(LocalDate date) {
-        this.date = date;
+    public void setToday(LocalDate today) {
+        this.today = today;
+    }
+
+    public void setToday(Supplier<LocalDate> supplier) {
+        this.today = supplier.get();
     }
 
     public void setOutputGenerator(Output outputGenerator) {
@@ -134,14 +142,16 @@ public class MonthCalendar {
     }
 
     public void setWeekendDays(List<DayOfWeek> weekendDays) {
-        this.weekends = weekendDays;
+        this.weekendDays = weekendDays;
     }
 
-    public void setWeekStart(DayOfWeek day) {
-        this.firstDayOfWeek = day;
+    public void setWeekStart(DayOfWeek firstDayOfWeek) {
+        this.firstDayOfWeek = firstDayOfWeek;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getToday() {
+        return today;
     }
+
+
 }
