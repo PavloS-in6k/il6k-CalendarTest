@@ -38,6 +38,7 @@ public class CalendarTest {
     public void setup() throws Exception {
         today = LocalDate.parse("2016-07-07");
         calendar.setOutputGenerator(new ConsoleOutput());
+        calendar.setUpdatingToday(false);
         setAdditionalDataAfterChangingDate();
     }
 
@@ -128,8 +129,7 @@ public class CalendarTest {
     @Test
     public void isFirstConstructorWorks() throws Exception {
         calendar = new MonthCalendar(DayOfWeek.THURSDAY);
-        calendar.setToday(LocalDate.parse("2016-07-07"));
-        splitCalendarIntoLines();
+        setup();
         assertThat(splitedCalendar[2], startsWith(DayColor.TODAY + 7));
     }
 

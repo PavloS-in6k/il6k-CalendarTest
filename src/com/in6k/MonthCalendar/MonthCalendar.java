@@ -18,6 +18,9 @@ public class MonthCalendar implements CalendarInterface {
     private List<DayOfWeek> weekendDays = new ArrayList<>();
     private DayOfWeek firstDayOfWeek;
 
+
+    private boolean updatingToday = true;
+
     public MonthCalendar() {
         setBasicCalendarOptions();
     }
@@ -39,8 +42,8 @@ public class MonthCalendar implements CalendarInterface {
 
     @Override
     public String generateCalendar(YearMonth date) throws Exception {
-        if (today == LocalDate.now().minusDays(1) || today == null)
-            setToday(() -> LocalDate.parse("2016-07-07"));
+        if (updatingToday)
+            setToday(LocalDate::now);
         this.date = date;
         String calendar = "";
         calendar += getCalendarBeginning();
@@ -155,5 +158,9 @@ public class MonthCalendar implements CalendarInterface {
         return today;
     }
 
+
+    public void setUpdatingToday(boolean status) {
+        this.updatingToday = status;
+    }
 
 }
