@@ -1,7 +1,7 @@
 package com.in6k.MonthCalendar;
 
-import com.in6k.MonthCalendar.OutputStrategy.HTML.CSSHighlighthClass;
-import com.in6k.MonthCalendar.OutputStrategy.HTML.HTMLOutput;
+import com.in6k.MonthCalendar.OutputStrategy.Html.CssHighlighthClass;
+import com.in6k.MonthCalendar.OutputStrategy.Html.HtmlOutput;
 import com.in6k.MonthCalendar.OutputStrategy.Output;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,9 +12,9 @@ import java.time.LocalDate;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-public class HTMLOutputTest {
+public class HtmlOutputTest {
     private LocalDate today;
-    private Output outputGenerator = new HTMLOutput();
+    private Output outputGenerator = new HtmlOutput();
 
     @Before
     public void setup() throws Exception {
@@ -46,18 +46,18 @@ public class HTMLOutputTest {
     @Test
     public void isTodayHighlighted() throws Exception {
         assertThat(outputGenerator.getHighlightedDayToday(7),
-                equalTo("<td class=\"" + CSSHighlighthClass.TODAY + "\">7</td>"));
+                equalTo("<td class=\"" + CssHighlighthClass.TODAY + "\">7</td>"));
     }
 
     @Test
     public void isWorkDayHighlighted() throws Exception {
-        assertThat(outputGenerator.getHighlightedDayWork(1), equalTo("<td class=\"" + CSSHighlighthClass.WORK + "\">1</td>"));
+        assertThat(outputGenerator.getHighlightedDayWork(1), equalTo("<td class=\"" + CssHighlighthClass.WORK + "\">1</td>"));
     }
 
     @Test
     public void isWeekendHighlighted() throws Exception {
         assertThat(outputGenerator.getHighlightedDayWeekend(2),
-                equalTo("<td class=\"" + CSSHighlighthClass.WEEKEND + "\">2</td>"));
+                equalTo("<td class=\"" + CssHighlighthClass.WEEKEND + "\">2</td>"));
     }
 
     @Test

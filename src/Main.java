@@ -1,8 +1,8 @@
-import com.in6k.HTMLDocument.HTMLDocument;
+import com.in6k.HtmlDocument.HtmlDocument;
 import com.in6k.MonthCalendar.MonthCalendar;
 import com.in6k.MonthCalendar.OutputStrategy.BracketsOutput;
 import com.in6k.MonthCalendar.OutputStrategy.ConsoleOutput;
-import com.in6k.MonthCalendar.OutputStrategy.HTML.HTMLOutput;
+import com.in6k.MonthCalendar.OutputStrategy.Html.HtmlOutput;
 import com.in6k.MonthCalendar.OutputStrategy.TypeOfRequestedOutput;
 
 import java.io.PrintWriter;
@@ -18,7 +18,7 @@ public class Main {
         }
 
         System.out.print(calendar.getStringCalendar());
-        generateFileOutput(calendar);
+        generateTextBracketsFileOutput(calendar);
         generateHTMLFileOutput(calendar);
     }
 
@@ -31,14 +31,16 @@ public class Main {
         return calendar;
     }
 
-    private static void generateFileOutput(MonthCalendar calendar) throws Exception {
+    private static void generateTextBracketsFileOutput(MonthCalendar calendar) throws Exception {
+        setOutputType(calendar, TypeOfRequestedOutput.CONSOLE_BRACKETS);
         PrintWriter writer = new PrintWriter("the-file-name.txt", "UTF-8");
         writer.println(calendar.getStringCalendar());
         writer.close();
     }
 
     private static void generateHTMLFileOutput(MonthCalendar calendar) throws Exception {
-        HTMLDocument document = new HTMLDocument();
+        HtmlDocument document = new HtmlDocument();
+        setOutputType(calendar, TypeOfRequestedOutput.HTML_DOCUMENT);
         document.addToDocument(calendar.getStringCalendar());
         PrintWriter writer = new PrintWriter("calendar.html", "UTF-8");
         writer.println(document.getDocument());
@@ -56,10 +58,9 @@ public class Main {
                 break;
             }
             case HTML_DOCUMENT: {
-                calendar.setOutputGenerator(new HTMLOutput());
+                calendar.setOutputGenerator(new HtmlOutput());
                 break;
             }
         }
     }
-
 }

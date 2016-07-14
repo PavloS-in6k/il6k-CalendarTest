@@ -1,9 +1,9 @@
-package com.in6k.HTMLDocument;
+package com.in6k.HtmlDocument;
 
-public class HTMLDocument {
+public class HtmlDocument {
     private String document = "";
 
-    public HTMLDocument() {
+    public HtmlDocument() {
         document +=
                 "<!DOCTYPE html>\n" +
                         "<html>\n" +

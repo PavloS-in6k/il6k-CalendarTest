@@ -1,4 +1,4 @@
-package com.in6k.MonthCalendar.OutputStrategy.HTML;
+package com.in6k.MonthCalendar.OutputStrategy.Html;
 
 import com.in6k.MonthCalendar.OutputStrategy.Output;
 
@@ -7,61 +7,61 @@ import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
-public class HTMLOutput implements Output {
+public class HtmlOutput implements Output {
     @Override
     public String getDayOfWeekWeekendName(DayOfWeek day) {
         return wrapContentInTag((day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)),
-                HTMLTags.CELL, CSSHighlighthClass.WEEKEND);
+                HtmlTags.CELL, CssHighlighthClass.WEEKEND);
     }
 
     @Override
     public String getDayOfWeekWorkName(DayOfWeek day) {
         return wrapContentInTag((day.getDisplayName(TextStyle.SHORT, Locale.ENGLISH)),
-                HTMLTags.CELL, CSSHighlighthClass.WORK);
+                HtmlTags.CELL, CssHighlighthClass.WORK);
     }
 
     @Override
     public String getEmptyPartOfCalendar(LocalDate date) {
         String forTabs = "";
         for (int i = 1; i < DayOfWeek.from(date.withDayOfMonth(1)).getValue(); i++) {
-            forTabs += wrapContentInTag("", HTMLTags.CELL, CSSHighlighthClass.WORK);
+            forTabs += wrapContentInTag("", HtmlTags.CELL, CssHighlighthClass.WORK);
         }
         return forTabs;
     }
 
     @Override
     public String getHighlightedDayToday(int dayOfMonthNumber) {
-        return wrapContentInTag(String.valueOf(dayOfMonthNumber), HTMLTags.CELL, CSSHighlighthClass.TODAY);
+        return wrapContentInTag(String.valueOf(dayOfMonthNumber), HtmlTags.CELL, CssHighlighthClass.TODAY);
     }
 
     @Override
     public String getHighlightedDayWork(int dayOfMonthNumber) {
-        return wrapContentInTag(String.valueOf(dayOfMonthNumber), HTMLTags.CELL, CSSHighlighthClass.WORK);
+        return wrapContentInTag(String.valueOf(dayOfMonthNumber), HtmlTags.CELL, CssHighlighthClass.WORK);
     }
 
     @Override
     public String getHighlightedDayWeekend(int dayOfMonthNumber) {
-        return wrapContentInTag(String.valueOf(dayOfMonthNumber), HTMLTags.CELL, CSSHighlighthClass.WEEKEND);
+        return wrapContentInTag(String.valueOf(dayOfMonthNumber), HtmlTags.CELL, CssHighlighthClass.WEEKEND);
     }
 
     @Override
     public String getOpenLineTag() {
-        return "<" + HTMLTags.TABLE_ROW + ">";
+        return "<" + HtmlTags.TABLE_ROW + ">";
     }
 
     @Override
     public String getCloseLineTag() {
-        return "</" + HTMLTags.TABLE_ROW + ">" + "\n";
+        return "</" + HtmlTags.TABLE_ROW + ">" + "\n";
     }
 
     @Override
     public String getOpenInfo() {
-        return "<" + HTMLTags.TABLE + ">" + "\n";
+        return "<" + HtmlTags.TABLE + ">" + "\n";
     }
 
     @Override
     public String getCloseInfo() {
-        return "</" + HTMLTags.TABLE + ">" + "\n";
+        return "</" + HtmlTags.TABLE + ">" + "\n";
     }
 
     private String wrapContentInTag(String content, String tag) {

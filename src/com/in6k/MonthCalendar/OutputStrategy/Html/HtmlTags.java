@@ -1,6 +1,6 @@
-package com.in6k.MonthCalendar.OutputStrategy.HTML;
+package com.in6k.MonthCalendar.OutputStrategy.Html;
 
-public class HTMLTags {
+public class HtmlTags {
     public static final String CELL = "td";
     public static final String TABLE_ROW = "tr";
     public static final String TABLE = "table";
