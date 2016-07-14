@@ -20,11 +20,7 @@ public class BracketsOutput implements Output {
 
     @Override
     public String getEmptyPartOfCalendar(LocalDate date) {
-        String forTabs = "";
-        for (int i = 1; i < DayOfWeek.from(date.withDayOfMonth(1)).getValue(); i++) {
-            forTabs += delimiter;
-        }
-        return forTabs;
+        return delimiter;
     }
 
     @Override

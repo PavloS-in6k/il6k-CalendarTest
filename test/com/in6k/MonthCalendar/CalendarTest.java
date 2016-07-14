@@ -4,7 +4,6 @@ import com.in6k.MonthCalendar.OutputStrategy.BracketsOutput;
 import com.in6k.MonthCalendar.OutputStrategy.ConsoleOutput;
 import com.in6k.MonthCalendar.OutputStrategy.DayColor;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.time.DayOfWeek;
@@ -51,13 +50,6 @@ public class CalendarTest {
         today = LocalDate.parse("2016-02-01");
         setAdditionalDataAfterChangingDate();
         assertThat(splitedCalendar[1], startsWith(DayColor.TODAY + 1));
-    }
-
-    @Test
-    @Ignore("Find way to identify color of day and remove ignore")
-    public void isDaysOfWeekWrittenRigth() {
-
-        assertThat(splitedCalendar[0], is(equalTo("Mon\tTue\tWed\tThu\tFri\tSat\tSun\t")));
     }
 
     @Test

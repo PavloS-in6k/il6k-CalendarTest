@@ -17,7 +17,13 @@ public class MonthCalendar {
         String calendar = "";
         calendar += getCalendarBeginning();
         for (int dayOfMonthNumber = 1; dayOfMonthNumber <= date.lengthOfMonth(); dayOfMonthNumber++) {
+            if (isDayBeginsWeek(dayOfMonthNumber)) {
+                calendar += outputGenerator.getOpenLineTag();
+            }
             calendar += getDay(dayOfMonthNumber);
+            if (isDayEndsWeek(dayOfMonthNumber)) {
+                calendar += outputGenerator.getCloseLineTag();
+            }
         }
         calendar += getCalendarEnding();
         return calendar;
@@ -28,24 +34,23 @@ public class MonthCalendar {
     }
 
     private String getDay(int dayOfMonthNumber) {
-        String result = "";
-        if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.MONDAY) {
-            result += outputGenerator.getOpenLineTag();
-        }
-        result += getHighlightedDay(dayOfMonthNumber);
-        if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY
-                || date.lengthOfMonth() == dayOfMonthNumber) {
-            result += outputGenerator.getCloseLineTag();
-        }
-        return result;
+        return getHighlightedDay(dayOfMonthNumber);
+    }
+
+    private boolean isDayEndsWeek(int dayOfMonthNumber) {
+        return DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY
+                || date.lengthOfMonth() == dayOfMonthNumber;
+    }
+
+    private boolean isDayBeginsWeek(int dayOfMonthNumber) {
+        return DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.MONDAY;
     }
 
     private String getHighlightedDay(int dayOfMonthNumber) {
         if (date.getDayOfMonth() == dayOfMonthNumber) {
             return outputGenerator.getHighlightedDayToday(dayOfMonthNumber);
         } else {
-            if (DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SATURDAY
-                    || DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY) {
+            if (isDayWeekend(dayOfMonthNumber)) {
                 return outputGenerator.getHighlightedDayWeekend(dayOfMonthNumber);
             } else {
                 return outputGenerator.getHighlightedDayWork(dayOfMonthNumber);
@@ -53,12 +58,26 @@ public class MonthCalendar {
         }
     }
 
+    private boolean isDayWeekend(int dayOfMonthNumber) {
+        return DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SATURDAY
+                || DayOfWeek.from(date.withDayOfMonth(dayOfMonthNumber)) == DayOfWeek.SUNDAY;
+    }
+
     private String getCalendarBeginning() {
         return outputGenerator.getOpenInfo()
                 + getDaysOfWeek()
                 + outputGenerator.getOpenLineTag()
-                + outputGenerator.getEmptyPartOfCalendar(date);
+                + getEmptyPartOfCalendar();
     }
+
+    private String getEmptyPartOfCalendar() {
+        String forTabs = "";
+        for (int i = 1; i < DayOfWeek.from(date.withDayOfMonth(1)).getValue(); i++) {
+            forTabs += outputGenerator.getEmptyPartOfCalendar(date);
+        }
+        return forTabs;
+    }
+
 
     private String getDaysOfWeek() {
         return outputGenerator.getOpenLineTag()

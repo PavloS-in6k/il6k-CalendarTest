@@ -59,12 +59,4 @@ public class HtmlOutputTest {
         assertThat(outputGenerator.getHighlightedDayWeekend(2),
                 equalTo("<td class=\"" + CssHighlighthClass.WEEKEND + "\">2</td>"));
     }
-
-    @Test
-    public void isEmptyCellsCreatedRight() throws Exception {
-        assertThat(outputGenerator.getEmptyPartOfCalendar(today),
-                equalTo("<td class=\"work\"></td><td class=\"work\"></td><td class=\"work\"></td><td class=\"work\"></td>"));
-    }
-
-
 }

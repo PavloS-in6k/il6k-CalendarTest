@@ -22,11 +22,7 @@ public class HtmlOutput implements Output {
 
     @Override
     public String getEmptyPartOfCalendar(LocalDate date) {
-        String forTabs = "";
-        for (int i = 1; i < DayOfWeek.from(date.withDayOfMonth(1)).getValue(); i++) {
-            forTabs += wrapContentInTag("", HtmlTags.CELL, CssHighlighthClass.WORK);
-        }
-        return forTabs;
+        return wrapContentInTag("", HtmlTags.CELL, CssHighlighthClass.WORK);
     }
 
     @Override
