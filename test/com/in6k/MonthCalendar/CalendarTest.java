@@ -8,6 +8,8 @@ import org.junit.Test;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.Arrays;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
@@ -20,7 +22,7 @@ public class CalendarTest {
     private LocalDate today;
 
     private void splitCalendarIntoLines() throws Exception {
-        splitedCalendar = calendar.getStringCalendar().split("\\.?\n");
+        splitedCalendar = calendar.generateCalendar(YearMonth.from(today)).split("\\.?\n");
     }
 
     private String[] splitLineIntoDates(int index) {
@@ -28,7 +30,7 @@ public class CalendarTest {
     }
 
     private void setAdditionalDataAfterChangingDate() throws Exception {
-        calendar.setLocalDate(today);
+        calendar.setToday(today);
         splitCalendarIntoLines();
     }
 
@@ -36,12 +38,14 @@ public class CalendarTest {
     public void setup() throws Exception {
         today = LocalDate.parse("2016-07-07");
         calendar.setOutputGenerator(new ConsoleOutput());
+        calendar.setUpdatingToday(false);
+        calendar.setSupplier(() -> calendar.getToday());
         setAdditionalDataAfterChangingDate();
     }
 
     @Test
     public void todayShownWithRigthColor() throws Exception {
-        assertThat(calendar.getStringCalendar(),
+        assertThat(calendar.generateCalendar(YearMonth.from(today)),
                 containsString(DayColor.TODAY + today.getDayOfMonth()));
     }
 
@@ -61,7 +65,7 @@ public class CalendarTest {
 
     @Test
     public void isWeekendTodayHighlightedWithRigthColor() throws Exception {
-        calendar.setLocalDate(LocalDate.parse("2016-07-09"));
+        calendar.setToday(LocalDate.parse("2016-07-09"));
         splitCalendarIntoLines();
         String[] splitedDates = splitLineIntoDates(2);
         assertThat(splitedDates[SAT], startsWith(DayColor.TODAY));
@@ -76,7 +80,7 @@ public class CalendarTest {
 
     @Test
     public void etalonForSpecialDate() throws Exception {
-        calendar.setLocalDate(LocalDate.parse("2016-07-07"));
+        calendar.setToday(LocalDate.parse("2016-07-07"));
         calendar.setOutputGenerator(new BracketsOutput());
         String etalonCalendar =
                 "Mon Tue Wed Thu Fri [Sat] [Sun] \n" +
@@ -86,7 +90,7 @@ public class CalendarTest {
                         "18 19 20 21 22 [23] [24] \n" +
                         "25 26 27 28 29 [30] [31] \n";
         etalonCalendar = etalonCalendar.replace(" ", "\t");
-        assertThat(calendar.getStringCalendar(), is(equalTo(etalonCalendar)));
+        assertThat(calendar.generateCalendar(YearMonth.from(today)), is(equalTo(etalonCalendar)));
     }
 
     @Test
@@ -95,5 +99,48 @@ public class CalendarTest {
         setAdditionalDataAfterChangingDate();
         splitLineIntoDates(2);
         assertThat(today.getDayOfWeek(), equalTo(DayOfWeek.MONDAY));
+    }
+
+    @Test
+    public void isWeekStartWithRigthDay() throws Exception {
+        setDayAsFirstDayOfWeekAndUpdateTestData(DayOfWeek.FRIDAY);
+        assertThat(splitedCalendar[1], startsWith(DayColor.WORK + 1));
+    }
+
+    private void setDayAsFirstDayOfWeekAndUpdateTestData(DayOfWeek day) throws Exception {
+        calendar.setWeekStart(day);
+        splitCalendarIntoLines();
+    }
+
+    @Test
+    public void isWeekendsHighlightedRight() throws Exception {
+        calendar.setWeekendDays(Arrays.asList(DayOfWeek.MONDAY));
+        assertThat(splitedCalendar[2], startsWith(DayColor.WORK + 4));
+    }
+
+    @Test
+    public void isWeekStartConstractorWorks() throws Exception {
+        setDayAsFirstDayOfWeekAndUpdateTestData(DayOfWeek.WEDNESDAY);
+        calendar.setWeekendDays(Arrays.asList(DayOfWeek.MONDAY));
+        splitCalendarIntoLines();
+        assertThat(splitedCalendar[1], containsString(DayColor.WEEKEND + 4));
+        assertThat(splitedCalendar[2], containsString(DayColor.TODAY + 7));
+    }
+
+    @Test
+    public void isFirstConstructorWorks() throws Exception {
+        calendar = new MonthCalendar(DayOfWeek.THURSDAY);
+        setup();
+        assertThat(splitedCalendar[2], startsWith(DayColor.TODAY + 7));
+    }
+
+    @Test
+    public void isConstructorForWeekendsWorks() throws Exception {
+        calendar = new MonthCalendar(LocalDate.parse("2016-07-07"));
+        assertThat(calendar.getToday(), equalTo(LocalDate.parse("2016-07-07")));
+    }
+
+    private void outputCalendarInConsole() throws Exception {
+        System.out.print(calendar.generateCalendar(YearMonth.from(today)));
     }
 }
