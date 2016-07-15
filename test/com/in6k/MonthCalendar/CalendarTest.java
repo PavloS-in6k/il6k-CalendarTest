@@ -39,6 +39,7 @@ public class CalendarTest {
         today = LocalDate.parse("2016-07-07");
         calendar.setOutputGenerator(new ConsoleOutput());
         calendar.setUpdatingToday(false);
+        calendar.setSupplier(() -> calendar.getToday());
         setAdditionalDataAfterChangingDate();
     }
 

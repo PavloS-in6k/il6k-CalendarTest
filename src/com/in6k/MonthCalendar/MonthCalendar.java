@@ -17,6 +17,7 @@ public class MonthCalendar implements CalendarInterface {
     private Output outputGenerator = new ConsoleOutput();
     private List<DayOfWeek> weekendDays = new ArrayList<>();
     private DayOfWeek firstDayOfWeek;
+    private Supplier<LocalDate> supplier;
 
 
     private boolean updatingToday = true;
@@ -42,9 +43,10 @@ public class MonthCalendar implements CalendarInterface {
 
     @Override
     public String generateCalendar(YearMonth date) throws Exception {
-        if (updatingToday)
-            setToday(LocalDate::now);
+//        if (updatingToday)
+//            setToday(LocalDate::now);
         this.date = date;
+        setToday(supplier);
         String calendar = "";
         calendar += getCalendarBeginning();
         for (int dayOfMonthNumber = 1; dayOfMonthNumber <= date.lengthOfMonth(); dayOfMonthNumber++) {
@@ -158,9 +160,11 @@ public class MonthCalendar implements CalendarInterface {
         return today;
     }
 
-
     public void setUpdatingToday(boolean status) {
         this.updatingToday = status;
     }
 
+    public void setSupplier(Supplier<LocalDate> supplier) {
+        this.supplier = supplier;
+    }
 }

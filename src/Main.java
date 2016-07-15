@@ -14,6 +14,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         LocalDate LD = null;
         MonthCalendar calendar = getDateFromKeyboard(LD);
+        calendar.setSupplier(LocalDate::now);
         if (args.length == 1) {
             setOutputType(calendar, TypeOfRequestedOutput.valueOf(args[0]));
         }
