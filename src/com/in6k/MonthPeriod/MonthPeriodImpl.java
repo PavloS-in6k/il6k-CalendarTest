@@ -10,7 +10,6 @@ import java.util.List;
 public class MonthPeriodImpl implements MonthPeriod {
     private List<YearMonth> datesToShow;
 
-
     public MonthPeriodImpl(YearMonth date) {
         datesToShow = Arrays.asList(date);
     }

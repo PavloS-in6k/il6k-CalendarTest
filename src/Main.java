@@ -4,10 +4,14 @@ import com.in6k.MonthCalendar.OutputStrategy.BracketsOutput;
 import com.in6k.MonthCalendar.OutputStrategy.ConsoleOutput;
 import com.in6k.MonthCalendar.OutputStrategy.Html.HtmlOutput;
 import com.in6k.MonthCalendar.OutputStrategy.TypeOfRequestedOutput;
+import com.in6k.MonthPeriod.MonthPeriod;
+import com.in6k.MonthPeriod.MonthPeriodImpl;
 
 import java.io.PrintWriter;
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.YearMonth;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -18,11 +22,53 @@ public class Main {
         if (args.length == 1) {
             setOutputType(calendar, TypeOfRequestedOutput.valueOf(args[0]));
         }
+
+        MonthPeriod monthPeriod = new MonthPeriodImpl(YearMonth.from(LD));
+        String command;
+        int status = 1;
+
+        while (true) {
+            Scanner sc = new Scanner(System.in);
+            System.out.print("Enter your command : \n");
+            command = sc.next();
+            sc.close();
+            if (command.equals("")) break;
+            if (command.equals("next")) {
+                if (monthPeriod.getMonths().size() == 1) {
+                    if (monthPeriod.getMonths().get(0).getMonth().equals(Month.DECEMBER)) {
+
+                    }
+                }
+                monthPeriod = monthPeriod.next();
+            }
+            if (command.equals("previous")) {
+
+            }
+            if (command.equals("increase")) {
+                monthPeriod = monthPeriod.increase();
+                outputCalendar(monthPeriod.getMonths());
+            }
+            if (command.equals("decrease")) {
+                monthPeriod = monthPeriod.decrease();
+                outputCalendar(monthPeriod.getMonths());
+            }
+
+        }
+
+
         generateTextBracketsFileOutput(calendar);
         generateHTMLFileOutput(calendar);
-        setOutputType(calendar, TypeOfRequestedOutput.CONSOLE_COLOR);
-        while (true) {
-            System.out.print(calendar.generateCalendar(YearMonth.from(calendar.getToday())));
+//        setOutputType(calendar, TypeOfRequestedOutput.CONSOLE_COLOR);
+//        while (true) {
+//            System.out.print(calendar.generateCalendar(YearMonth.from(calendar.getToday())));
+//        }
+    }
+
+    private static void outputCalendar(List<YearMonth> months) throws Exception {
+        for(int i = 0; i <= months.size(); i++)
+        {
+            MonthCalendar monthCalendar = new MonthCalendar();
+            System.out.print(monthCalendar.generateCalendar(months.get(i)));
         }
     }
 
