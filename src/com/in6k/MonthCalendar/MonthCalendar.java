@@ -53,6 +53,10 @@ public class MonthCalendar implements CalendarInterface {
             }
             calendar += getDay(dayOfMonthNumber);
             if (isDayEndsWeek(dayOfMonthNumber)) {
+                for (int dayIndex = DayOfWeek.from(date.atDay(dayOfMonthNumber)).getValue();
+                     dayIndex <= DayOfWeek.SUNDAY.getValue(); dayIndex++) {
+                    calendar += outputGenerator.getEmptyPartOfCalendar();
+                }
                 calendar += outputGenerator.getCloseLineTag();
             }
         }
@@ -100,7 +104,7 @@ public class MonthCalendar implements CalendarInterface {
     private String getEmptyPartOfCalendar() {
         String forTabs = "";
         for (int i = 1; isThisDayGapBeforeFirstDayOfTheMonth(i); i++) {
-            forTabs += outputGenerator.getEmptyPartOfCalendar(today);
+            forTabs += outputGenerator.getEmptyPartOfCalendar();
         }
         return forTabs;
     }
@@ -122,6 +126,7 @@ public class MonthCalendar implements CalendarInterface {
         for (DayOfWeek day = firstDayOfWeek.plus(1); !day.equals(firstDayOfWeek); day = day.plus(1)) {
             result += getDayOfWeekName(day);
         }
+        result+=outputGenerator.getEmptyPartOfCalendar();
         return result;
     }
 

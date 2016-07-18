@@ -3,7 +3,6 @@ package com.in6k.MonthCalendar.OutputStrategy.Html;
 import com.in6k.MonthCalendar.OutputStrategy.Output;
 
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
@@ -21,7 +20,7 @@ public class HtmlOutput implements Output {
     }
 
     @Override
-    public String getEmptyPartOfCalendar(LocalDate date) {
+    public String getEmptyPartOfCalendar() {
         return wrapContentInTag("", HtmlTags.CELL, CssHighlighthClass.WORK);
     }
 

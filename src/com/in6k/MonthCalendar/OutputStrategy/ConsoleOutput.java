@@ -1,7 +1,6 @@
 package com.in6k.MonthCalendar.OutputStrategy;
 
 import java.time.DayOfWeek;
-import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
 
@@ -19,7 +18,7 @@ public class ConsoleOutput implements Output {
     }
 
     @Override
-    public String getEmptyPartOfCalendar(LocalDate date) {
+    public String getEmptyPartOfCalendar() {
         return delimiter;
     }
 

@@ -73,22 +73,16 @@ public class CalendarTest {
     }
 
     @Test
-    public void noDaysAfterLastDayOfThisMonth() {
-        assertThat(splitedCalendar[splitedCalendar.length - 1],
-                endsWith("" + today.lengthOfMonth() + "\t"));
-    }
-
-    @Test
     public void etalonForSpecialDate() throws Exception {
         calendar.setToday(LocalDate.parse("2016-07-07"));
         calendar.setOutputGenerator(new BracketsOutput());
         String etalonCalendar =
-                "Mon Tue Wed Thu Fri [Sat] [Sun] \n" +
-                        "    1 [2] [3] \n" +
-                        "4 5 6 {7} 8 [9] [10] \n" +
-                        "11 12 13 14 15 [16] [17] \n" +
-                        "18 19 20 21 22 [23] [24] \n" +
-                        "25 26 27 28 29 [30] [31] \n";
+                "Mon Tue Wed Thu Fri [Sat] [Sun]  \n" +
+                        "    1 [2] [3]  \n" +
+                        "4 5 6 {7} 8 [9] [10]  \n" +
+                        "11 12 13 14 15 [16] [17]  \n" +
+                        "18 19 20 21 22 [23] [24]  \n" +
+                        "25 26 27 28 29 [30] [31]  \n";
         etalonCalendar = etalonCalendar.replace(" ", "\t");
         assertThat(calendar.generateCalendar(YearMonth.from(today)), is(equalTo(etalonCalendar)));
     }
