@@ -131,6 +131,10 @@ public class MonthCalendar implements CalendarInterface {
         return outputGenerator.getDayOfWeekWorkName(day);
     }
 
+    public Output getOutputGenerator() {
+        return outputGenerator;
+    }
+
     private boolean isWeekend(DayOfWeek day) {
         return weekendDays.contains(day);
     }

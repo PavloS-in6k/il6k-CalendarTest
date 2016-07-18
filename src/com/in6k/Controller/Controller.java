@@ -1,6 +1,9 @@
 package com.in6k.Controller;
 
+import com.in6k.MonthCalendar.CalendarInterface;
 import com.in6k.MonthCalendar.MonthCalendar;
+import com.in6k.MonthCalendar.OutputStrategy.ConsoleOutput;
+import com.in6k.MonthCalendar.OutputStrategy.Output;
 import com.in6k.MonthPeriod.MonthPeriod;
 
 import java.time.LocalDate;
@@ -9,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Controller {
+    private CalendarInterface calendar = new MonthCalendar();
     private MonthPeriod monthPeriod;
     private List<String> calendarMonths = new ArrayList<>();
 
@@ -43,6 +47,20 @@ public class Controller {
 
 
     private void outputCalendar() throws Exception {
+        Output output = new ConsoleOutput();
+        List<String> calendar = new ArrayList<>();
+        splitedCalendar = calendar.generateCalendar(YearMonth.from(today)).split("\\.?\n");
+        output.getOpenLineTag() + "?(.)?" + output.getCloseLineTag()
+        if (calendarMonths.size() > 1)
+            for (int i = 0; i < calendarMonths.size(); i++) {
+                if (i == 0) {
+                    calendarMonths.get(i).replace(output.getCloseLineTag(), "")
+                }
+
+
+            }
+
+
         for (int i = 0; i < calendarMonths.size(); i++) {
             System.out.print(calendarMonths.get(i));
         }
