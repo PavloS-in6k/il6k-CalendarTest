@@ -20,7 +20,7 @@ public class PeriodYear implements PeriodSetter {
 
     @Override
     public PeriodSetter getNextPeriod() {
-        return new PeriodYear();
+        return this;
     }
 
     @Override

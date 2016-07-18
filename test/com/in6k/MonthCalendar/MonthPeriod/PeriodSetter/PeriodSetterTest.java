@@ -1,4 +1,4 @@
-package com.in6k.MonthCalendar.PeriodSetter;
+package com.in6k.MonthCalendar.MonthPeriod.PeriodSetter;
 
 import com.in6k.MonthPeriod.PeriodSetter.PeriodMonth;
 import com.in6k.MonthPeriod.PeriodSetter.PeriodSetter;

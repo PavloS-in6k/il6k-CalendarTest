@@ -43,8 +43,6 @@ public class MonthCalendar implements CalendarInterface {
 
     @Override
     public String generateCalendar(YearMonth date) throws Exception {
-//        if (updatingToday)
-//            setToday(LocalDate::now);
         this.date = date;
         setToday(supplier);
         String calendar = "";
@@ -87,7 +85,7 @@ public class MonthCalendar implements CalendarInterface {
     }
 
     private String getHighlightedDay(int dayOfMonthNumber) {
-        if (today.getDayOfMonth() == dayOfMonthNumber && date.getMonth().equals(today.getMonth())) {
+        if (today.getDayOfMonth() == dayOfMonthNumber && date.getMonth().equals(today.getMonth()) && (date.getYear() == today.getYear())) {
             return outputGenerator.getHighlightedDayToday(dayOfMonthNumber);
         } else {
             if (isWeekend(DayOfWeek.from(date.atDay(dayOfMonthNumber)))) {
@@ -108,7 +106,8 @@ public class MonthCalendar implements CalendarInterface {
     }
 
     private boolean isThisDayGapBeforeFirstDayOfTheMonth(int i) {
-        return i < DayOfWeek.from(today.withDayOfMonth(1)).getValue() - (firstDayOfWeek.getValue() - 1);
+        return i < (DayOfWeek.from(LocalDate.of(date.getYear(), date.getMonth().getValue(), 1)).getValue()
+                - (firstDayOfWeek.getValue() - 1));
     }
 
     private String getDaysOfWeek() {

@@ -1,84 +1,54 @@
+import com.in6k.Controller.Commands;
+import com.in6k.Controller.Controller;
 import com.in6k.HtmlDocument.HtmlDocument;
 import com.in6k.MonthCalendar.MonthCalendar;
 import com.in6k.MonthCalendar.OutputStrategy.BracketsOutput;
 import com.in6k.MonthCalendar.OutputStrategy.ConsoleOutput;
 import com.in6k.MonthCalendar.OutputStrategy.Html.HtmlOutput;
 import com.in6k.MonthCalendar.OutputStrategy.TypeOfRequestedOutput;
-import com.in6k.MonthPeriod.MonthPeriod;
 import com.in6k.MonthPeriod.MonthPeriodImpl;
 
 import java.io.PrintWriter;
 import java.time.LocalDate;
-import java.time.Month;
 import java.time.YearMonth;
-import java.util.List;
 import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        LocalDate LD = null;
-        MonthCalendar calendar = getDateFromKeyboard(LD);
+        Scanner sc = new Scanner(System.in);
+        MonthCalendar calendar = getDateFromKeyboard(sc);
+        LocalDate LD = calendar.getToday();
         calendar.setSupplier(LocalDate::now);
         if (args.length == 1) {
             setOutputType(calendar, TypeOfRequestedOutput.valueOf(args[0]));
         }
 
-        MonthPeriod monthPeriod = new MonthPeriodImpl(YearMonth.from(LD));
         String command;
-        int status = 1;
+
+        Controller controller = new Controller(new MonthPeriodImpl(YearMonth.from(LD)));
 
         while (true) {
-            Scanner sc = new Scanner(System.in);
-            System.out.print("Enter your command : \n");
+            System.out.print("Enter your command (next, previous, increase, decrease, or exit): \n");
             command = sc.next();
-            sc.close();
-            if (command.equals("")) break;
-            if (command.equals("next")) {
-                if (monthPeriod.getMonths().size() == 1) {
-                    if (monthPeriod.getMonths().get(0).getMonth().equals(Month.DECEMBER)) {
 
-                    }
-                }
-                monthPeriod = monthPeriod.next();
-            }
-            if (command.equals("previous")) {
-
-            }
-            if (command.equals("increase")) {
-                monthPeriod = monthPeriod.increase();
-                outputCalendar(monthPeriod.getMonths());
-            }
-            if (command.equals("decrease")) {
-                monthPeriod = monthPeriod.decrease();
-                outputCalendar(monthPeriod.getMonths());
-            }
-
+            if (command.equals("exit")) break;
+            if (command.equals("next")) controller.run(Commands.NEXT);
+            if (command.equals("previous")) controller.run(Commands.PREVIOUS);
+            if (command.equals("increase")) controller.run(Commands.INCREASE);
+            if (command.equals("decrease")) controller.run(Commands.DECREASE);
         }
 
+        sc.close();
 
         generateTextBracketsFileOutput(calendar);
         generateHTMLFileOutput(calendar);
-//        setOutputType(calendar, TypeOfRequestedOutput.CONSOLE_COLOR);
-//        while (true) {
-//            System.out.print(calendar.generateCalendar(YearMonth.from(calendar.getToday())));
-//        }
     }
 
-    private static void outputCalendar(List<YearMonth> months) throws Exception {
-        for(int i = 0; i <= months.size(); i++)
-        {
-            MonthCalendar monthCalendar = new MonthCalendar();
-            System.out.print(monthCalendar.generateCalendar(months.get(i)));
-        }
-    }
 
-    private static MonthCalendar getDateFromKeyboard(LocalDate LD) {
+    private static MonthCalendar getDateFromKeyboard(Scanner sc) {
         MonthCalendar calendar;
-        Scanner sc = new Scanner(System.in);
         System.out.print("Enter your today in format YYYY-MM-DD : \n");
-        LD = LocalDate.parse(sc.next());
-        calendar = new MonthCalendar(LD);
-        sc.close();
+        calendar = new MonthCalendar(LocalDate.parse(sc.nextLine()));
         return calendar;
     }
 

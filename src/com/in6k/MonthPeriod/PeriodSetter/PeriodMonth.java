@@ -20,6 +20,6 @@ public class PeriodMonth implements PeriodSetter {
 
     @Override
     public PeriodSetter getPreviousPeriod() {
-        return new PeriodMonth();
+        return this;
     }
 }
